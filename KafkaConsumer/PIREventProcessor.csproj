@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if $(Os)==Windows_NT (&#xD;&#xA;$(SolutionDir)tools\net462\protogen *.proto --proto_path=$(ProjectDir)ProtoFiles\ --csharp_out=$(ProjectDir)Models --package=Proto.Models&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+    <Exec Command="if $(Os)==Windows_NT then&#xD;&#xA;(&#xD;&#xA;$(SolutionDir)tools\net462\protogen *.proto --proto_path=$(ProjectDir)ProtoFiles\ --csharp_out=$(ProjectDir)Models --package=Proto.Models&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
   </Target>
 
 </Project>
