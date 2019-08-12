@@ -35,7 +35,7 @@ namespace PIREventProcessor.Processor
 
            if (pir_detection_match.Success)
            {
-                //just a comment     
+                //just a commentm     
            }
         }
     }
