@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  pireventprocessor:
-    image: pireventprocessor
-    build:
-      context: .
-      dockerfile: KafkaConsumer/Dockerfile
