@@ -31,7 +31,7 @@ namespace PIREventProcessor.Kafka
                 BootstrapServers = _kafkaConfig.Broker,
                 GroupId = _kafkaConfig.ConsumerGroup.ToString(),
                 AutoCommitIntervalMs = 5000,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+               
             };
 
             using (var c = new ConsumerBuilder<Ignore, byte[]>(consumerconfig).Build())
