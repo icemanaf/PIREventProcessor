@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Proto.Models;
 using ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PIREventProcessor.Kafka
 {
@@ -14,9 +14,7 @@ namespace PIREventProcessor.Kafka
     {
         private readonly KafkaConfig _kafkaConfig;
 
-
         private readonly ILogger _logger;
-
 
         public KafkaClient(ILogger<KafkaClient> logger, IOptions<KafkaConfig> config)
         {
@@ -33,8 +31,7 @@ namespace PIREventProcessor.Kafka
             {
                 {"group.id", _kafkaConfig.ConsumerGroup},
                 {"bootstrap.servers", _kafkaConfig.Broker},
-                {"auto.commit.interval.ms", 5000},
-                {"auto.offset.reset", "earliest"}
+                {"auto.commit.interval.ms", 5000}
             };
 
             using (var consumer = new Consumer<Null, byte[]>(config, null, new ByteArrayDeserializer()))
@@ -51,20 +48,18 @@ namespace PIREventProcessor.Kafka
             }
         }
 
-        public Message SendMessage(KafkaMessage km,string topic)
+        public Message SendMessage(KafkaMessage km, string topic)
         {
             var config = new Dictionary<string, object>
             {
                 {"bootstrap.servers", _kafkaConfig.Broker}
             };
 
-
             using (var producer = new Producer(config))
             {
-               var task= producer.ProduceAsync(topic, null, Serialize(km));
+                var task = producer.ProduceAsync(topic, null, Serialize(km));
 
                 return task.Result;
-
             }
         }
 
@@ -90,7 +85,6 @@ namespace PIREventProcessor.Kafka
                 return Serializer.Deserialize<KafkaMessage>(ms);
             }
         }
-
 
         private byte[] Serialize(KafkaMessage km)
         {
