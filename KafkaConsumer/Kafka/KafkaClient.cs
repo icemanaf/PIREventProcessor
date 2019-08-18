@@ -46,6 +46,8 @@ namespace PIREventProcessor.Kafka
                     {
                         var cr = c.Consume();
 
+                        _logger.LogInformation("{@cr}", cr);
+
                         ConsumerOnMessage(cr.Value);
                     }
                     catch (Exception ex)
