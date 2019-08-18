@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Confluent.Kafka;
 using Proto.Models;
-using Confluent.Kafka;
+using System;
 
 namespace PIREventProcessor.Kafka
 {
@@ -10,6 +10,6 @@ namespace PIREventProcessor.Kafka
 
         void Consume();
 
-        Message SendMessage(KafkaMessage km,string topic);
+        DeliveryResult<Null, byte[]> SendMessage(KafkaMessage km, string topic);
     }
 }

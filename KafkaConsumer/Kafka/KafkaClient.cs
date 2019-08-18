@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
+﻿using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Proto.Models;
 using ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PIREventProcessor.Kafka
 {
@@ -14,9 +13,7 @@ namespace PIREventProcessor.Kafka
     {
         private readonly KafkaConfig _kafkaConfig;
 
-
         private readonly ILogger _logger;
-
 
         public KafkaClient(ILogger<KafkaClient> logger, IOptions<KafkaConfig> config)
         {
@@ -29,53 +26,62 @@ namespace PIREventProcessor.Kafka
 
         public void Consume()
         {
-            var config = new Dictionary<string, object>
+            var consumerconfig = new ConsumerConfig()
             {
-                {"group.id", _kafkaConfig.ConsumerGroup},
-                {"bootstrap.servers", _kafkaConfig.Broker},
-                {"auto.commit.interval.ms", 5000},
-                {"auto.offset.reset", "earliest"}
+                BootstrapServers = _kafkaConfig.Broker,
+                GroupId = _kafkaConfig.ConsumerGroup.ToString(),
+                AutoCommitIntervalMs = 5000,
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            using (var consumer = new Consumer<Null, byte[]>(config, null, new ByteArrayDeserializer()))
+            using (var c = new ConsumerBuilder<Ignore, byte[]>(consumerconfig).Build())
             {
-                consumer.Subscribe(_kafkaConfig.DetectionTopic);
+                c.Subscribe(_kafkaConfig.DetectionTopic);
 
                 _logger.LogInformation("Connected to kafka");
 
-                consumer.OnMessage += Consumer_OnMessage;
+                while (true)
+                {
+                    try
+                    {
+                        var cr = c.Consume();
 
-                consumer.OnError += Consumer_OnError;
-
-                while (true) consumer.Poll(100);
+                        ConsumerOnMessage(cr.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("Error {ex}", ex);
+                    }
+                }
             }
         }
 
-        public Message SendMessage(KafkaMessage km,string topic)
+        public DeliveryResult<Null, byte[]> SendMessage(KafkaMessage km, string topic)
         {
             var config = new Dictionary<string, object>
             {
                 {"bootstrap.servers", _kafkaConfig.Broker}
             };
 
-
-            using (var producer = new Producer(config))
+            var producerconfig = new ProducerConfig
             {
-               var task= producer.ProduceAsync(topic, null, Serialize(km));
+                BootstrapServers = _kafkaConfig.Broker
+            };
+
+            using (var p = new ProducerBuilder<Null, byte[]>(producerconfig).Build())
+            {
+                var task = p.ProduceAsync(topic, new Message<Null, byte[]>
+                {
+                    Value = Serialize(km)
+                });
 
                 return task.Result;
-
             }
         }
 
-        private void Consumer_OnError(object sender, Error e)
+        private void ConsumerOnMessage(byte[] val)
         {
-            _logger.LogError("Kafka consumer error {e}", e);
-        }
-
-        private void Consumer_OnMessage(object sender, Message<Null, byte[]> e)
-        {
-            var message = DeSerialize(e.Value);
+            var message = DeSerialize(val);
 
             _logger.LogInformation("message received {@m}", message);
 
@@ -90,7 +96,6 @@ namespace PIREventProcessor.Kafka
                 return Serializer.Deserialize<KafkaMessage>(ms);
             }
         }
-
 
         private byte[] Serialize(KafkaMessage km)
         {
