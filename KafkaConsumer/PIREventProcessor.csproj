@@ -41,8 +41,4 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="$(SolutionDir)tools\net462\protogen *.proto --proto_path=$(ProjectDir)ProtoFiles\ --csharp_out=$(ProjectDir)Models --package=Proto.Models" />
-  </Target>
-
 </Project>
