@@ -28,4 +28,5 @@ script:
    docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
    docker tag $TAG $TAG:$TRAVIS_BUILD_NUMBER
    docker push $TAG:$TRAVIS_BUILD_NUMBER
+   docker push $TAG
   fi
