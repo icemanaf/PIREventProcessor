@@ -17,8 +17,6 @@ script:
 - docker ps 
 # build image
 - docker build -t $TAG .
-# test image
-- sudo docker run --privileged --rm $TAG uname -a
 # push to docker
 - echo $TRAVIS_TAG
 - echo $TRAVIS_BRANCH
