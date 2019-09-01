@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2-stretch-slim-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2-bionic-arm32v7 AS base
 COPY /tmp/qemu-arm-static /usr/bin/qemu-arm-static
 RUN apt-get update && apt-get install -y librdkafka-dev librdkafka1
 #RUN apt-get install openssl
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch-arm32v7 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-bionic-arm32v7 AS build
 COPY /tmp/qemu-arm-static /usr/bin/qemu-arm-static
 WORKDIR /src
 COPY PIREventProcessor.sln ./
