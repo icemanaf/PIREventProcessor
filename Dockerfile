@@ -8,6 +8,7 @@ WORKDIR /src
 COPY PIREventProcessor.sln ./
 COPY KafkaConsumer/PIREventProcessor.csproj KafkaConsumer/
 COPY . .
+COPY /tmp/qemu-arm-static /usr/bin/qemu-arm-static
 RUN dotnet restore -nowarn:msb3202,nu1503
 
 WORKDIR /src/KafkaConsumer
