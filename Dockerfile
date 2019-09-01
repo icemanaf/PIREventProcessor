@@ -1,12 +1,15 @@
-FROM microsoft/dotnet:2.1-runtime AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS base
+RUN apt-get update && apt-get install -y librdkafka-dev librdkafka1
+#RUN apt-get install openssl
 WORKDIR /app
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
 COPY PIREventProcessor.sln ./
 COPY KafkaConsumer/PIREventProcessor.csproj KafkaConsumer/
-RUN dotnet restore -nowarn:msb3202,nu1503
 COPY . .
+RUN dotnet restore -nowarn:msb3202,nu1503
+
 WORKDIR /src/KafkaConsumer
 RUN dotnet build -c Release -o /app
 
