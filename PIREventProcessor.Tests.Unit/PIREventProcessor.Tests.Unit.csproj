@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KafkaConsumer\PIREventProcessor.csproj" />
+    <ProjectReference Include="..\PIREventProcessor\PIREventProcessor.csproj" />
   </ItemGroup>
 
 </Project>
