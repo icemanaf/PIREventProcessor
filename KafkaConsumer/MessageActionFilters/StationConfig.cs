@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-
-
-namespace PIREventProcessor.Processor
+namespace PIREventProcessor.MessageActionFilters
 {
     public class StationConfig
     {
@@ -15,7 +14,7 @@ namespace PIREventProcessor.Processor
 
     public class Station
     {
-        public string Desc { get; set; }
+        public string Description { get; set; }
 
         public string Id { get; set; }
 

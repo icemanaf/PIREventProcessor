@@ -8,6 +8,6 @@
 
         public string DetectionTopic { get; set; }
 
-        public string WriteBackTopic { get; set; }
+        public string VideoRequestTopic { get; set; }
     }
 }

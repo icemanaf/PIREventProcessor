@@ -32,7 +32,7 @@ namespace KafkaConsumer.Tests
             {
                Broker= "192.168.0.85:9092",
                 DetectionTopic= "PIR_DETECT",
-                WriteBackTopic= "VIDEO_REQUEST",
+                VideoRequestTopic= "VIDEO_REQUEST",
                 ConsumerGroup= 0
             });
 
@@ -54,7 +54,7 @@ namespace KafkaConsumer.Tests
             };
 
 
-             var m=_kafkaClient.SendMessage(km, _mockKafkaConfig.Object.Value.WriteBackTopic);
+             var m=_kafkaClient.SendVideoRequestMessage(km);
 
             Assert.IsNotNull(m);
 

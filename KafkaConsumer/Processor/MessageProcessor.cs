@@ -1,42 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PIREventProcessor.Influx;
+﻿using Microsoft.Extensions.Logging;
+using PIREventProcessor.MessageActionFilters;
 using Proto.Models;
-
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
 
 namespace PIREventProcessor.Processor
 {
-    public class MessageProcessor:IMessageProcessor
+    public class MessageProcessor : IMessageProcessor
     {
-        private readonly IInfluxClient _influxClient;
         private readonly ILogger _ilogger;
-        private readonly StationConfig _stationConfig;
 
-        private Regex _pir_detect_regexp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
+        private List<IMessageActionFilter> _messageFilters = new List<IMessageActionFilter>();
 
-        
-
-        public MessageProcessor(ILogger<MessageProcessor> logger,IInfluxClient influxClient, IOptions<StationConfig> config)
+        public MessageProcessor(ILogger<MessageProcessor> logger)
         {
             _ilogger = logger;
-
-            _influxClient = influxClient;
-
-            _stationConfig = config.Value;
         }
+
+        public void AddMessageFilter(IMessageActionFilter messageFilter)
+        {
+            _messageFilters.Add(messageFilter);
+        }
+
         public void ProcessMessages(KafkaMessage km)
         {
+            try
+            {
+                foreach (var filter in _messageFilters)
+                {
+                    filter.Execute(km);
+                }
+            }
+            catch (Exception e)
+            {
+                _ilogger.LogError(e.ToString());
+            }
+        }
 
-           var pir_detection_match = _pir_detect_regexp.Match(km.Payload);
-
-           if (pir_detection_match.Success)
-           {
-                //just a comment     
-           }
+        public void RemoveAllMessageFilters()
+        {
+            _messageFilters.Clear();
         }
     }
 }

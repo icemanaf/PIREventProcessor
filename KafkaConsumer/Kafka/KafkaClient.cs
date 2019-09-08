@@ -48,7 +48,7 @@ namespace PIREventProcessor.Kafka
             }
         }
 
-        public Message SendMessage(KafkaMessage km, string topic)
+        public Message SendVideoRequestMessage(KafkaMessage km)
         {
             var config = new Dictionary<string, object>
             {
@@ -57,7 +57,9 @@ namespace PIREventProcessor.Kafka
 
             using (var producer = new Producer(config))
             {
-                var task = producer.ProduceAsync(topic, null, Serialize(km));
+                var task = producer.ProduceAsync(_kafkaConfig.VideoRequestTopic, null, Serialize(km));
+
+                _logger.LogInformation("sent video request message {@m} to {t}",km, _kafkaConfig.VideoRequestTopic);
 
                 return task.Result;
             }

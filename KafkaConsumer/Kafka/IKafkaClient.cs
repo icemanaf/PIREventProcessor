@@ -10,6 +10,6 @@ namespace PIREventProcessor.Kafka
 
         void Consume();
 
-        Message SendMessage(KafkaMessage km,string topic);
+        Message SendVideoRequestMessage(KafkaMessage km);
     }
 }

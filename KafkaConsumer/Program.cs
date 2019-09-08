@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PIREventProcessor.Influx;
 using PIREventProcessor.Kafka;
 using PIREventProcessor.Processor;
+using PIREventProcessor.MessageActionFilters;
 using Serilog;
 
 namespace PIREventProcessor
@@ -36,6 +37,8 @@ namespace PIREventProcessor
             services.UseInflux(configuration);
 
             services.UseMessageProcessor(configuration);
+
+            services.UseMessageActionFilters(configuration);
 
             services.AddTransient<App>();
         }
