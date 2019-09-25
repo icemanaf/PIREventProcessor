@@ -52,8 +52,10 @@ namespace PIREventProcessor.MessageActionFilters
 
                     if (station != null)
                     {
+
+                        var dt = Convert.ToDateTime(km.DatetimeCreatedUtc);
                         //insert into influxdb
-                        _influxClient.WritePirDetectEvent(km.Id, station_id, station.Description, DateTime.UtcNow);
+                        _influxClient.WritePirDetectEvent(km.Id, station_id, station.Description, dt);
                         
                         //insert into the Video Request queue
                         var vidRequestMessage = new KafkaMessage()

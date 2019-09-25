@@ -24,9 +24,9 @@ namespace PIREventProcessor
 
             _processor.AddMessageFilter(_pirDetectFilter);
 
-            client.Consume();
-
             client.OnMessageReceived += Client_OnMessageReceived;
+
+            client.Consume();
         }
 
         public void Client_OnMessageReceived(object sender, KafkaMessage m)
