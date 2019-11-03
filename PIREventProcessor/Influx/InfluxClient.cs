@@ -29,7 +29,7 @@ namespace PIREventProcessor.Influx
                     {"correlation_id", correlationId},
                     {"device_id", deviceId},
                     {"area", area},
-                    {"detect_time", $"{time:dd-MMM-yyyy HH:ss}"}
+                    {"detect_time", $"{time:dd-MMM-yyyy HH:mm}"}
                 };
 
                 Metrics.Write("pir_detection", record);
