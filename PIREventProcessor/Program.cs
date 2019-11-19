@@ -5,6 +5,7 @@ using PIREventProcessor.Influx;
 using PIREventProcessor.Kafka;
 using PIREventProcessor.Processor;
 using PIREventProcessor.MessageActionFilters;
+using PIREventProcessor.Utilities;
 using Serilog;
 
 namespace PIREventProcessor
@@ -39,6 +40,8 @@ namespace PIREventProcessor
             services.UseMessageProcessor(configuration);
 
             services.UseMessageActionFilters(configuration);
+
+            services.UseUtilities();
 
             services.AddTransient<App>();
         }
