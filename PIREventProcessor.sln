@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PIREventProcessor", "PIREventProcessor\PIREventProcessor.csproj", "{E6A26D94-0943-4EF7-838B-79F51C65215D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventProcessor", "EventProcessor\EventProcessor.csproj", "{E6A26D94-0943-4EF7-838B-79F51C65215D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PIREventProcessor.Tests.Unit", "PIREventProcessor.Tests.Unit\PIREventProcessor.Tests.Unit.csproj", "{3E70AF6D-9F89-4A1B-BCA3-CD5487B7BBA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventProcessor.Tests.Unit", "EventProcessor.Tests.Unit\EventProcessor.Tests.Unit.csproj", "{3E70AF6D-9F89-4A1B-BCA3-CD5487B7BBA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PIREventProcessor.Tests.Integration", "PIREventProcessor.Tests.Integration\PIREventProcessor.Tests.Integration.csproj", "{BD66B18D-2424-447B-8712-BB6028E63A71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventProcessor.Tests.Integration", "EventProcessor.Tests.Integration\EventProcessor.Tests.Integration.csproj", "{BD66B18D-2424-447B-8712-BB6028E63A71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
