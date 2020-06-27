@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Confluent.Kafka;
 using Proto.Models;
-using Confluent.Kafka;
+using System;
 
 namespace EventProcessor.Kafka
 {
@@ -8,8 +8,10 @@ namespace EventProcessor.Kafka
     {
         event EventHandler<KafkaMessage> OnMessageReceived;
 
-        void Consume();
+        void Consume(string Brokers, string Topic, string ConsumerGroup);
 
         Message SendVideoRequestMessage(KafkaMessage km);
+
+        void SendMessage(string Brokers, string Topic, string ConsumerGroup, KafkaMessage message);
     }
 }

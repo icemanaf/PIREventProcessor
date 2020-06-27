@@ -29,6 +29,8 @@ namespace EventProcessor
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false).Build();
 
+            
+
             var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
             services.AddLogging(builder => { builder.AddSerilog(logger, true); });
@@ -44,6 +46,10 @@ namespace EventProcessor
             services.UseUtilities();
 
             services.AddTransient<App>();
+
+            services.Configure<AppConfig>(configuration.GetSection("app"));
+
+            services.AddOptions();
         }
     }
 }

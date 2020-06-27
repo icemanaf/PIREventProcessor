@@ -7,7 +7,6 @@ namespace EventProcessor.Kafka
     {
         public static void  UseKafka(this IServiceCollection services,IConfiguration configuration)
         {
-            services.Configure<KafkaConfig>(configuration.GetSection("kafka"));
 
             services.AddTransient<IKafkaClient, KafkaClient>();
         }

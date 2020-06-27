@@ -1,8 +1,10 @@
 ﻿using EventProcessor.Kafka;
-using EventProcessor.MessageActionFilters;
+using EventProcessor.MessageActionFilters.PIR;
 using EventProcessor.Processor;
+using Microsoft.Extensions.Options;
 using Proto.Models;
 using System;
+using System.Reactive.Linq;
 
 namespace EventProcessor
 {
@@ -12,10 +14,16 @@ namespace EventProcessor
 
         private readonly IMessageProcessor _processor;
 
-        private readonly PIRDetectFilter _pirDetectFilter;
+        private readonly DetectionFilter _pirDetectFilter;
 
-        public App(IKafkaClient client, IMessageProcessor processor, PIRDetectFilter pirDetectFilter)
+        private readonly AppConfig _appConfig;
+
+        public IObservable<KafkaMessage> KafkaMessageStream { get; }
+
+        public App(IKafkaClient client, IMessageProcessor processor, DetectionFilter pirDetectFilter, IOptions<AppConfig> appConfig)
         {
+            _appConfig = appConfig.Value;
+
             _kafkaClient = client;
 
             _processor = processor;
@@ -24,22 +32,24 @@ namespace EventProcessor
 
             _processor.AddMessageFilter(_pirDetectFilter);
 
-            client.OnMessageReceived += Client_OnMessageReceived;
+            KafkaMessageStream = Observable.FromEvent<EventHandler<KafkaMessage>, KafkaMessage>(handler =>
+            {
+                EventHandler<KafkaMessage> kmHandler = (sender, e) => handler(e);
 
-            client.Consume();
-        }
-
-        public void Client_OnMessageReceived(object sender, KafkaMessage m)
-        {
-            //todo
-            _processor.ProcessMessages(m);
+                return kmHandler;
+            },
+            x =>
+            {
+                _kafkaClient.OnMessageReceived += x;
+            }, y =>
+            {
+                _kafkaClient.OnMessageReceived -= y;
+            });
         }
 
         public void Run()
         {
-            Console.WriteLine("hello world");
-
-            Console.Read();
+            _kafkaClient.Consume(_appConfig.KafkaBrokers, _appConfig.MainEventTopic, _appConfig.ConsumerGroup);
         }
     }
 }

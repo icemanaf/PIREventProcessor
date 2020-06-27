@@ -1,7 +1,6 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Proto.Models;
 using ProtoBuf;
 using System;
@@ -12,31 +11,27 @@ namespace EventProcessor.Kafka
 {
     public class KafkaClient : IKafkaClient
     {
-        private readonly KafkaConfig _kafkaConfig;
-
         private readonly ILogger _logger;
 
-        public KafkaClient(ILogger<KafkaClient> logger, IOptions<KafkaConfig> config)
+        public KafkaClient(ILogger<KafkaClient> logger)
         {
             _logger = logger;
-
-            _kafkaConfig = config.Value;
         }
 
         public event EventHandler<KafkaMessage> OnMessageReceived;
 
-        public void Consume()
+        public void Consume(string Brokers, string Topic, string ConsumerGroup)
         {
             var config = new Dictionary<string, object>
             {
-                {"group.id", _kafkaConfig.ConsumerGroup},
-                {"bootstrap.servers", _kafkaConfig.Broker},
+                {"group.id", ConsumerGroup},
+                {"bootstrap.servers", Brokers},
                 {"auto.commit.interval.ms", 5000}
             };
 
             using (var consumer = new Consumer<Null, byte[]>(config, null, new ByteArrayDeserializer()))
             {
-                consumer.Subscribe(_kafkaConfig.DetectionTopic);
+                consumer.Subscribe(Topic);
 
                 _logger.LogInformation("Connected to kafka");
 
@@ -48,21 +43,30 @@ namespace EventProcessor.Kafka
             }
         }
 
+        
+
+        public void SendMessage(string Brokers, string Topic, string ConsumerGroup, KafkaMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
         public Message SendVideoRequestMessage(KafkaMessage km)
         {
-            var config = new Dictionary<string, object>
-            {
-                {"bootstrap.servers", _kafkaConfig.Broker}
-            };
+            //var config = new Dictionary<string, object>
+            //{
+            //    {"bootstrap.servers", _kafkaConfig.Broker}
+            //};
 
-            using (var producer = new Producer(config))
-            {
-                var task = producer.ProduceAsync(_kafkaConfig.VideoRequestTopic, null, Serialize(km));
+            //using (var producer = new Producer(config))
+            //{
+            //    var task = producer.ProduceAsync(_kafkaConfig.VideoRequestTopic, null, Serialize(km));
 
-                _logger.LogInformation("sent video request message {@m} to {t}",km, _kafkaConfig.VideoRequestTopic);
+            //    _logger.LogInformation("sent video request message {@m} to {t}", km, _kafkaConfig.VideoRequestTopic);
 
-                return task.Result;
-            }
+            //    return task.Result;
+            //}
+
+            return null;
         }
 
         private void Consumer_OnError(object sender, Error e)
