@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace EventProcessor.MessageActionFilters
 {
-    public class PIRDetectFilter : IMessageActionFilter
+    public class PIRDetectFilter  
     {
         private class StationHitCounter
         {

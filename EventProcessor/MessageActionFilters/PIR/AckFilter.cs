@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EventProcessor.MessageActionFilters.PIR
 {
-    public class AckFilter : IMessageActionFilter
+    public class AckFilter
     {
         public AckFilter()
         {

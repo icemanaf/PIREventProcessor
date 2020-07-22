@@ -22,4 +22,8 @@
     <ProjectReference Include="..\EventProcessor\EventProcessor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProcessorTests\" />
+  </ItemGroup>
+
 </Project>

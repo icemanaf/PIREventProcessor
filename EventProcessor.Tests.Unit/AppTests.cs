@@ -1,6 +1,5 @@
 ﻿using EventProcessor.Kafka;
 using EventProcessor.MessageActionFilters.PIR;
-using EventProcessor.Processor;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -14,8 +13,8 @@ namespace EventProcessor.Tests.Unit
     public class AppTests
     {
         private Mock<IKafkaClient> _mockKafkaClient;
-        private Mock<IMessageProcessor> _mockMessageProcessor;
-        private Mock<DetectionFilter> _mockPirFilter;
+
+        private Mock<PIRDetectionFilter> _mockPirFilter;
         private Mock<IOptions<AppConfig>> _mockIoptionsAppConfig;
 
         [Test]
@@ -23,9 +22,7 @@ namespace EventProcessor.Tests.Unit
         {
             _mockKafkaClient = new Mock<IKafkaClient>();
 
-            _mockMessageProcessor = new Mock<IMessageProcessor>();
-
-            _mockPirFilter = new Mock<DetectionFilter>();
+            _mockPirFilter = new Mock<PIRDetectionFilter>();
 
             _mockIoptionsAppConfig = new Mock<IOptions<AppConfig>>();
 
@@ -36,9 +33,7 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            var app = new App(_mockKafkaClient.Object, _mockMessageProcessor.Object, _mockPirFilter.Object, _mockIoptionsAppConfig.Object);
-
-            _mockMessageProcessor.Verify(x => x.AddMessageFilter(It.IsAny<DetectionFilter>()), Times.Once);
+            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object);
 
             app.Run();
         }
@@ -48,10 +43,6 @@ namespace EventProcessor.Tests.Unit
         {
             _mockKafkaClient = new Mock<IKafkaClient>();
 
-            _mockMessageProcessor = new Mock<IMessageProcessor>();
-
-            _mockPirFilter = new Mock<DetectionFilter>();
-
             _mockIoptionsAppConfig = new Mock<IOptions<AppConfig>>();
 
             _mockIoptionsAppConfig.Setup(x => x.Value).Returns(new AppConfig
@@ -61,7 +52,7 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            var app = new App(_mockKafkaClient.Object, _mockMessageProcessor.Object, _mockPirFilter.Object, _mockIoptionsAppConfig.Object);
+            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object);
 
             app.Run();
 

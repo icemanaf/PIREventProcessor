@@ -1,6 +1,4 @@
 ﻿using EventProcessor.Kafka;
-using EventProcessor.MessageActionFilters.PIR;
-using EventProcessor.Processor;
 using Microsoft.Extensions.Options;
 using Proto.Models;
 using System;
@@ -12,25 +10,15 @@ namespace EventProcessor
     {
         private readonly IKafkaClient _kafkaClient;
 
-        private readonly IMessageProcessor _processor;
-
-        private readonly DetectionFilter _pirDetectFilter;
-
         private readonly AppConfig _appConfig;
 
         public IObservable<KafkaMessage> KafkaMessageStream { get; }
 
-        public App(IKafkaClient client, IMessageProcessor processor, DetectionFilter pirDetectFilter, IOptions<AppConfig> appConfig)
+        public App(IKafkaClient client, IOptions<AppConfig> appConfig)
         {
             _appConfig = appConfig.Value;
 
             _kafkaClient = client;
-
-            _processor = processor;
-
-            _pirDetectFilter = pirDetectFilter;
-
-            _processor.AddMessageFilter(_pirDetectFilter);
 
             KafkaMessageStream = Observable.FromEvent<EventHandler<KafkaMessage>, KafkaMessage>(handler =>
             {

@@ -1,12 +1,12 @@
-﻿using System.IO;
+﻿using EventProcessor.Influx;
+using EventProcessor.Kafka;
+using EventProcessor.MessageActionFilters;
+using EventProcessor.Processor;
+using EventProcessor.Utilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EventProcessor.Influx;
-using EventProcessor.Kafka;
-using EventProcessor.Processor;
-using EventProcessor.MessageActionFilters;
-using EventProcessor.Utilities;
 using Serilog;
+using System.IO;
 
 namespace EventProcessor
 {
@@ -20,16 +20,15 @@ namespace EventProcessor
 
             var serviceProvider = services.BuildServiceProvider();
 
-            serviceProvider.GetService<App>().Run();
-        }
+            var service = serviceProvider.GetService<App>();
 
+            service.Run();
+        }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false).Build();
-
-            
 
             var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
@@ -45,7 +44,7 @@ namespace EventProcessor
 
             services.UseUtilities();
 
-            services.AddTransient<App>();
+            services.AddSingleton<App>();
 
             services.Configure<AppConfig>(configuration.GetSection("app"));
 

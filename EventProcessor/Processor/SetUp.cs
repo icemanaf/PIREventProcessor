@@ -7,7 +7,7 @@ namespace EventProcessor.Processor
     {
         public static void UseMessageProcessor(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IMessageProcessor, MessageProcessor>();
+            services.AddTransient<IMessageStreamer<Proto.Models.KafkaMessage>, KMMessageStreamer>();
         }
     }
 }
