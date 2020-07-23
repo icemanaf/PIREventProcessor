@@ -36,7 +36,7 @@ namespace EventProcessor.MessageActionFilters.PIR
             {
                 _logger.LogInformation("Detection filter  Enabled. Subscribing to Kafka message stream.");
 
-                _kmmMessageStreamer.MessageSource.Subscribe(OnNext, OnError);
+                _kmmMessageStreamer.MessageSource.Where(x=> _pirDetectRegExp.Match(x.Payload).Success).Subscribe(OnNext, OnError);
             }
             else
             {
@@ -44,9 +44,12 @@ namespace EventProcessor.MessageActionFilters.PIR
             }
         }
 
+        
+
+
         public void OnNext(KafkaMessage km)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnError(Exception e)
@@ -56,7 +59,7 @@ namespace EventProcessor.MessageActionFilters.PIR
 
         public void OnCompleted()
         {
-            _logger.LogInformation($"{nameof(this.GetType)}- stream has completed");
+            _logger.LogInformation("stream has completed.");
         }
     }
 }
