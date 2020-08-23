@@ -1,10 +1,13 @@
 ﻿using EventProcessor.Kafka;
+using EventProcessor.MessageActionFilters;
 using EventProcessor.MessageActionFilters.PIR;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using Proto.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 
 namespace EventProcessor.Tests.Unit
@@ -16,6 +19,7 @@ namespace EventProcessor.Tests.Unit
 
         private Mock<PIRDetectionFilter> _mockPirFilter;
         private Mock<IOptions<AppConfig>> _mockIoptionsAppConfig;
+        private Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>> _mockFilters;
 
         [Test]
         public void test_that_the_app_loads_up()
@@ -33,7 +37,11 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object);
+            _mockFilters = new Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>>();
+
+            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IMessageActionFilter<KafkaMessage>>().GetEnumerator());
+
+            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object, _mockFilters.Object);
 
             app.Run();
         }
@@ -52,7 +60,11 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object);
+            _mockFilters = new Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>>();
+
+            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IMessageActionFilter<KafkaMessage>>().GetEnumerator());
+
+            var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object, _mockFilters.Object);
 
             app.Run();
 

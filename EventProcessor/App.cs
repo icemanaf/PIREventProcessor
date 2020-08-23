@@ -1,7 +1,9 @@
 ﻿using EventProcessor.Kafka;
+using EventProcessor.MessageActionFilters;
 using Microsoft.Extensions.Options;
 using Proto.Models;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 
 namespace EventProcessor
@@ -12,10 +14,14 @@ namespace EventProcessor
 
         private readonly AppConfig _appConfig;
 
+        private IEnumerable<IMessageActionFilter<KafkaMessage>> _filters;
+
         public IObservable<KafkaMessage> KafkaMessageStream { get; }
 
-        public App(IKafkaClient client, IOptions<AppConfig> appConfig)
+        public App(IKafkaClient client, IOptions<AppConfig> appConfig, IEnumerable<IMessageActionFilter<KafkaMessage>> filters)
         {
+            _filters = filters;
+
             _appConfig = appConfig.Value;
 
             _kafkaClient = client;
@@ -37,6 +43,12 @@ namespace EventProcessor
 
         public void Run()
         {
+
+            foreach(var filter in _filters)
+            {
+                filter.Observe(KafkaMessageStream);
+            }
+
             _kafkaClient.Consume(_appConfig.KafkaBrokers, _appConfig.MainEventTopic, _appConfig.ConsumerGroup);
         }
     }

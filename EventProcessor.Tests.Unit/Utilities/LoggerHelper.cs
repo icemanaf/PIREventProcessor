@@ -17,5 +17,17 @@ namespace EventProcessor.Tests.Unit.Utilities
 
             return mockLogger;
         }
+
+        public static Mock<ILogger<T>> VerifyLogInfo<T>(this Mock<ILogger<T>> mockLogger, string info,Times times)
+        {
+            mockLogger.Verify(x => x.Log(
+          LogLevel.Information,
+          It.IsAny<EventId>(),
+          It.Is<It.IsAnyType>((v, t) => v.ToString().Equals(info)),
+          It.IsAny<Exception>(),
+          It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),times);
+
+            return mockLogger;
+        }
     }
 }

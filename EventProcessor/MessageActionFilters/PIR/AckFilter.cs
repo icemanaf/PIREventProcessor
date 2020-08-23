@@ -1,25 +1,22 @@
 ﻿using Proto.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventProcessor.MessageActionFilters.PIR
 {
-    public class AckFilter
+    public class AckFilter : IMessageActionFilter<KafkaMessage>
     {
         public AckFilter()
         {
-
         }
 
-        public void Execute(KafkaMessage km)
+        public bool Enabled()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public bool IsEnabled()
+        public void Observe(IObservable<KafkaMessage> observable)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

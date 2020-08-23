@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EventProcessor.MessageActionFilters.PIR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Proto.Models;
 
 namespace EventProcessor.MessageActionFilters
 {
@@ -10,7 +12,11 @@ namespace EventProcessor.MessageActionFilters
             //setup configuration
             services.Configure<StationConfig>(configuration.GetSection("StationConfig"));
 
-            services.AddTransient<PIRDetectFilter>();
+            services.Configure<PIRDetectionFilter>(configuration.GetSection("PIRDetectionFilterConfig"));
+
+            services.AddSingleton<IMessageActionFilter<KafkaMessage>, PIRDetectionFilter>();
+
+            services.AddSingleton<IMessageActionFilter<KafkaMessage>, AckFilter>();
         }
     }
 }

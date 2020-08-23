@@ -35,7 +35,7 @@ namespace EventProcessor.MessageActionFilters
 
         private DateTime _last_video_detect_time = DateTime.MinValue;
         private DateTime _last_pir_event = DateTime.MinValue;
-        private int _pir_counter = 0;
+       
 
         private Regex _pirDetectRegExp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
         private Regex _stationExtractorRegExp = new Regex("[0-9]{4,6}", RegexOptions.Compiled);

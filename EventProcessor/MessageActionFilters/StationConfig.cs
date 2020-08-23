@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventProcessor.MessageActionFilters
+﻿namespace EventProcessor.MessageActionFilters
 {
     public class StationConfig
     {
         public Station[] Stations { get; set; }
-
     }
-
-
 
     public class Station
     {
@@ -19,6 +12,5 @@ namespace EventProcessor.MessageActionFilters
         public string Id { get; set; }
 
         public bool Enabled { get; set; }
-
     }
 }
