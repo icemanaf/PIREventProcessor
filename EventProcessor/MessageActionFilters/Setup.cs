@@ -9,10 +9,9 @@ namespace EventProcessor.MessageActionFilters
     {
         public static void UseMessageActionFilters(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<PIRDetectionFilterConfig>(configuration.GetSection("PIRDetectionFilterConfig"));
             //setup configuration
             services.Configure<StationConfig>(configuration.GetSection("StationConfig"));
-
-            services.Configure<PIRDetectionFilter>(configuration.GetSection("PIRDetectionFilterConfig"));
 
             services.AddSingleton<IMessageActionFilter<KafkaMessage>, PIRDetectionFilter>();
 
