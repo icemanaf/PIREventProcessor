@@ -6,12 +6,12 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /src
 COPY PIREventProcessor.sln ./
-COPY PIREventProcessor/PIREventProcessor.csproj PIREventProcessor/
+COPY EventProcessor/EventProcessor.csproj EventProcessor/
 COPY . .
 
 RUN dotnet restore -nowarn:msb3202,nu1503
 
-WORKDIR /src/PIREventProcessor
+WORKDIR /src/EventProcessor
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish

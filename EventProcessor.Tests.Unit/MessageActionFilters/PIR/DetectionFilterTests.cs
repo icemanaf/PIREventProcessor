@@ -124,7 +124,7 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
                 Stations = new[] { new Station() { Id = testStationId, Description = testStationArea, Enabled = true } }
             });
 
-            _mockTimeProvider.Setup(x => x.GetCurrentTimeUtc()).Returns(testDateTime);
+            _mockTimeProvider.Setup(x => x.GetCurrentTimeUtc()).Returns(testDateTime.AddSeconds(150));
 
             var testScheduler = new TestScheduler();
 

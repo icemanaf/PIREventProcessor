@@ -18,6 +18,7 @@ namespace EventProcessor.MessageActionFilters.PIR
     /// </summary>
     public class PIRDetectionFilter : IMessageActionFilter<KafkaMessage>
     {
+        
         private Regex _pirDetectRegExp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
         private Regex _stationExtractorRegExp = new Regex("[0-9]{4,6}", RegexOptions.Compiled);
 
@@ -53,16 +54,28 @@ namespace EventProcessor.MessageActionFilters.PIR
         {
             var x = kmList;
 
-            var stations = kmList.GroupBy(x => ExtractStationFromKM(x, _stationConfig).Id).Where(grp => grp.Count() > THRESHOLD_VALUE).Select(x => x.Key);
+            if (kmList.Count > 0)
+                _logger.LogInformation("PIR event detected..");
 
-            foreach (var station in stations)
+            try
             {
-                var sta = _stationConfig.Stations.Where(x => x.Id.Equals(station)).FirstOrDefault();
+                var stations = kmList.GroupBy(x => ExtractStationFromKM(x, _stationConfig).Id).Where(grp => grp.Count() > THRESHOLD_VALUE).Select(x => x.Key);
 
-                _influxClient.WritePirDetectEvent(Guid.NewGuid().ToString(), station.Trim(), sta.Description, _timeProvider.GetCurrentTimeUtc());
+                foreach (var station in stations)
+                {
+                    var sta = _stationConfig.Stations.Where(x => x.Id.Equals(station)).FirstOrDefault();
 
-                _logger.LogInformation($"Activity detected in station {station}");
+                    _influxClient.WritePirDetectEvent(Guid.NewGuid().ToString(), station.Trim(), sta.Description, _timeProvider.GetCurrentTimeUtc());
+
+                    _logger.LogInformation($"Activity detected in station {station}");
+                }
             }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error!");
+            }
+
+           
         }
 
         public void OnError(Exception e)
@@ -106,10 +119,10 @@ namespace EventProcessor.MessageActionFilters.PIR
                 {
                     var dt = Convert.ToDateTime(x.DatetimeCreatedUtc);
 
-                    if (dt.Subtract(_timeProvider.GetCurrentTimeUtc()).TotalSeconds > 60)
+                    if ((_timeProvider.GetCurrentTimeUtc().Subtract(dt)).TotalSeconds > 60)
                         return false;
 
-                    var ret = _stationExtractorRegExp.Match(x.Payload).Success;
+                    var ret = _pirDetectRegExp.Match(x.Payload).Success;
 
                     return ret; ;
                 }).
