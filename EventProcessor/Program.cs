@@ -28,7 +28,9 @@ namespace EventProcessor
         private static void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config\\appsettings.json", false).Build();
+                .AddJsonFile(Path.Combine("config","appsettings.json"), false).Build();
+
+            
 
             var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
