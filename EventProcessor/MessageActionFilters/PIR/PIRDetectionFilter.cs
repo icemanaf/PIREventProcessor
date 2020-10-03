@@ -18,7 +18,6 @@ namespace EventProcessor.MessageActionFilters.PIR
     /// </summary>
     public class PIRDetectionFilter : IMessageActionFilter<KafkaMessage>
     {
-        
         private Regex _pirDetectRegExp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
         private Regex _stationExtractorRegExp = new Regex("[0-9]{4,6}", RegexOptions.Compiled);
 
@@ -33,7 +32,7 @@ namespace EventProcessor.MessageActionFilters.PIR
         private const int BUFFER_TIME = 10;
 
         //if there are hits beyond the threshold value within the buffer, send an acknowledgement.
-        private const int THRESHOLD_VALUE = 3;
+        private const int THRESHOLD_VALUE = 2;
 
         public PIRDetectionFilter(ILogger<PIRDetectionFilter> logger, IOptions<PIRDetectionFilterConfig> config, IOptions<StationConfig> stationConfig, ITimeProvider timeProvider, IInfluxClient influxClient, IScheduler scheduler = null)
         {
@@ -54,12 +53,34 @@ namespace EventProcessor.MessageActionFilters.PIR
         {
             var x = kmList;
 
-            if (kmList.Count > 0)
-                _logger.LogInformation("PIR event detected..");
-
             try
             {
-                var stations = kmList.GroupBy(x => ExtractStationFromKM(x, _stationConfig).Id).Where(grp => grp.Count() > THRESHOLD_VALUE).Select(x => x.Key);
+                var stations = kmList.Select((x) =>
+                {
+                    var pir_detection_match = _pirDetectRegExp.Match(x.Payload);
+
+                    if (pir_detection_match.Success)
+                    {
+                        var pir_detect_string = pir_detection_match.Groups[0].Value;
+
+                        var station_id_match = _stationExtractorRegExp.Match(pir_detect_string);
+
+                        if (station_id_match.Success)
+                        {
+                            var station_id = station_id_match.Groups[0].Value;
+
+                            return station_id;
+                        }
+                    }
+
+                    return string.Empty;
+                })
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .GroupBy(x => x)
+                    .Where(grp => grp.Count() >= THRESHOLD_VALUE).
+                    Select(x => x.Key);
+
+                // var stations = kmList.GroupBy(x => ExtractStationFromKM(x, _stationConfig).Id).Where(grp => grp.Count() > THRESHOLD_VALUE).Select(x => x.Key);
 
                 foreach (var station in stations)
                 {
@@ -70,12 +91,10 @@ namespace EventProcessor.MessageActionFilters.PIR
                     _logger.LogInformation($"Activity detected in station {station}");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error!");
             }
-
-           
         }
 
         public void OnError(Exception e)
@@ -86,20 +105,6 @@ namespace EventProcessor.MessageActionFilters.PIR
         public void OnCompleted()
         {
             _logger.LogInformation("stream has completed.");
-        }
-
-        private Station ExtractStationFromKM(KafkaMessage message, StationConfig config)
-        {
-            var match = _stationExtractorRegExp.Match(message.Payload);
-
-            if (match.Success)
-            {
-                var station = (new List<Station>(config.Stations)).FirstOrDefault(x => x.Id == match.Value);
-
-                return station;
-            }
-
-            return null;
         }
 
         public bool Enabled()
@@ -127,7 +132,7 @@ namespace EventProcessor.MessageActionFilters.PIR
                     return ret; ;
                 }).
                     Select(x => x)
-                    .Buffer(TimeSpan.FromSeconds(BUFFER_TIME), TimeSpan.FromSeconds(1), sch).Subscribe(OnNext, OnError, OnCompleted);
+                    .Buffer(TimeSpan.FromSeconds(BUFFER_TIME), TimeSpan.FromSeconds(2), sch).Subscribe(OnNext, OnError, OnCompleted);
             }
             else
             {
