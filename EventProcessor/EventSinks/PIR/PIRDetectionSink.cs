@@ -114,7 +114,7 @@ namespace EventProcessor.MessageActionFilters.PIR
         {
             if (_config.Enabled)
             {
-                _logger.LogInformation("Detection filter  Enabled. Subscribing to Kafka message stream.");
+                _logger.LogInformation("PIR Detection filter  Enabled.");
 
                 var sch = _scheduler == null ? DefaultScheduler.Instance : _scheduler;
 
