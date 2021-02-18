@@ -17,16 +17,16 @@ namespace EventProcessor.Tests.Unit
     {
         private Mock<IKafkaClient> _mockKafkaClient;
 
-        private Mock<PIRDetectionFilter> _mockPirFilter;
+        private Mock<PIRDetectionSink> _mockPirFilter;
         private Mock<IOptions<AppConfig>> _mockIoptionsAppConfig;
-        private Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>> _mockFilters;
+        private Mock<IEnumerable<IEventSink<KafkaMessage>>> _mockFilters;
 
         [Test]
         public void test_that_the_app_loads_up()
         {
             _mockKafkaClient = new Mock<IKafkaClient>();
 
-            _mockPirFilter = new Mock<PIRDetectionFilter>();
+            _mockPirFilter = new Mock<PIRDetectionSink>();
 
             _mockIoptionsAppConfig = new Mock<IOptions<AppConfig>>();
 
@@ -37,9 +37,9 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            _mockFilters = new Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>>();
+            _mockFilters = new Mock<IEnumerable<IEventSink<KafkaMessage>>>();
 
-            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IMessageActionFilter<KafkaMessage>>().GetEnumerator());
+            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IEventSink<KafkaMessage>>().GetEnumerator());
 
             var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object, _mockFilters.Object);
 
@@ -60,9 +60,9 @@ namespace EventProcessor.Tests.Unit
                 MainEventTopic = "topic"
             });
 
-            _mockFilters = new Mock<IEnumerable<IMessageActionFilter<KafkaMessage>>>();
+            _mockFilters = new Mock<IEnumerable<IEventSink<KafkaMessage>>>();
 
-            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IMessageActionFilter<KafkaMessage>>().GetEnumerator());
+            _mockFilters.Setup(x => x.GetEnumerator()).Returns(Enumerable.Empty<IEventSink<KafkaMessage>>().GetEnumerator());
 
             var app = new App(_mockKafkaClient.Object, _mockIoptionsAppConfig.Object, _mockFilters.Object);
 

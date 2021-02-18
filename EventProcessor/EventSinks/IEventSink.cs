@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 
 namespace EventProcessor.MessageActionFilters
 {
-    public interface IMessageActionFilter<T>
+    public interface IEventSink<T>
     {
         void Observe(IObservable<T> observable);
 

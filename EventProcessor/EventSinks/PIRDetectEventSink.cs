@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace EventProcessor.MessageActionFilters
 {
-    public class PIRDetectFilter  
+    public class PIRDetectEventSink  
     {
         private class StationHitCounter
         {
@@ -22,7 +22,7 @@ namespace EventProcessor.MessageActionFilters
 
         private Dictionary<string, StationHitCounter> _stationStats = new Dictionary<string, StationHitCounter>();
 
-        private readonly ILogger<PIRDetectFilter> _logger;
+        private readonly ILogger<PIRDetectEventSink> _logger;
 
         private readonly IKafkaClient _kafkaClient;
         private readonly IInfluxClient _influxClient;
@@ -40,7 +40,7 @@ namespace EventProcessor.MessageActionFilters
         private Regex _pirDetectRegExp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
         private Regex _stationExtractorRegExp = new Regex("[0-9]{4,6}", RegexOptions.Compiled);
 
-        public PIRDetectFilter(ILogger<PIRDetectFilter> logger, IOptions<StationConfig> stationConfig, IKafkaClient kafkaClient, IInfluxClient influxClient, ITimeProvider timeProvider)
+        public PIRDetectEventSink(ILogger<PIRDetectEventSink> logger, IOptions<StationConfig> stationConfig, IKafkaClient kafkaClient, IInfluxClient influxClient, ITimeProvider timeProvider)
         {
             _logger = logger;
 

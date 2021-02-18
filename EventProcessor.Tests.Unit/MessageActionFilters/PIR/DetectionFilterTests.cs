@@ -21,8 +21,8 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
     public class DetectionFilterTests
     {
         private Mock<IMessageStreamer<KafkaMessage>> _mockMessageStreamer;
-        private Mock<ILogger<PIRDetectionFilter>> _mockLogger;
-        private Mock<IOptions<PIRDetectionFilterConfig>> _mockConfig;
+        private Mock<ILogger<PIRDetectionSink>> _mockLogger;
+        private Mock<IOptions<PIRDetectionSinkConfig>> _mockConfig;
         private Mock<IOptions<StationConfig>> _mockStationConfig;
         private Mock<ITimeProvider> _mockTimeProvider;
         private Mock<IInfluxClient> _mockInfluxClient;
@@ -35,8 +35,8 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
         [Test]
         public void test_that_when_config_is_enabled__the_detector_subscribes_into_the_message_stream()
         {
-            _mockLogger = new Mock<ILogger<PIRDetectionFilter>>();
-            _mockConfig = new Mock<IOptions<PIRDetectionFilterConfig>>();
+            _mockLogger = new Mock<ILogger<PIRDetectionSink>>();
+            _mockConfig = new Mock<IOptions<PIRDetectionSinkConfig>>();
             _mockStationConfig = new Mock<IOptions<StationConfig>>();
             _mockTimeProvider = new Mock<ITimeProvider>();
             _mockInfluxClient = new Mock<IInfluxClient>();
@@ -46,9 +46,9 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
             var kmStream = testScheduler.CreateHotObservable<KafkaMessage>(new Recorded<Notification<KafkaMessage>>(0, Notification.CreateOnNext(new KafkaMessage() { Id = "id1" })));
 
             //setup
-            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionFilterConfig { Enabled = true });
+            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionSinkConfig { Enabled = true });
 
-            var filter = new PIRDetectionFilter(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object);
+            var filter = new PIRDetectionSink(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object);
 
             filter.Observe(kmStream);
 
@@ -67,8 +67,8 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
             //set the date and time for the test
             DateTime testDateTime = new DateTime(2020, 1, 1, 1, 0, 0);
 
-            _mockLogger = new Mock<ILogger<PIRDetectionFilter>>();
-            _mockConfig = new Mock<IOptions<PIRDetectionFilterConfig>>();
+            _mockLogger = new Mock<ILogger<PIRDetectionSink>>();
+            _mockConfig = new Mock<IOptions<PIRDetectionSinkConfig>>();
             _mockStationConfig = new Mock<IOptions<StationConfig>>();
             _mockTimeProvider = new Mock<ITimeProvider>();
             _mockInfluxClient = new Mock<IInfluxClient>();
@@ -90,9 +90,9 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
                 );
 
             //setup
-            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionFilterConfig { Enabled = true });
+            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionSinkConfig { Enabled = true });
 
-            var filter = new PIRDetectionFilter(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object, testScheduler);
+            var filter = new PIRDetectionSink(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object, testScheduler);
 
             filter.Observe(kmStream);
 
@@ -113,8 +113,8 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
             //set the date and time for the test
             DateTime testDateTime = new DateTime(2020, 1, 1, 1, 0, 0);
 
-            _mockLogger = new Mock<ILogger<PIRDetectionFilter>>();
-            _mockConfig = new Mock<IOptions<PIRDetectionFilterConfig>>();
+            _mockLogger = new Mock<ILogger<PIRDetectionSink>>();
+            _mockConfig = new Mock<IOptions<PIRDetectionSinkConfig>>();
             _mockStationConfig = new Mock<IOptions<StationConfig>>();
             _mockTimeProvider = new Mock<ITimeProvider>();
             _mockInfluxClient = new Mock<IInfluxClient>();
@@ -136,9 +136,9 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
                 );
 
             //setup
-            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionFilterConfig { Enabled = true });
+            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionSinkConfig { Enabled = true });
 
-            var filter = new PIRDetectionFilter(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object, testScheduler);
+            var filter = new PIRDetectionSink(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object, testScheduler);
 
             filter.Observe(kmStream);
 
@@ -152,18 +152,18 @@ namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
         [Test]
         public void test_that_when_config_is_disabled__the_detector_does_not_subscribe_into_the_message_stream()
         {
-            _mockLogger = new Mock<ILogger<PIRDetectionFilter>>();
-            _mockConfig = new Mock<IOptions<PIRDetectionFilterConfig>>();
+            _mockLogger = new Mock<ILogger<PIRDetectionSink>>();
+            _mockConfig = new Mock<IOptions<PIRDetectionSinkConfig>>();
             _mockStationConfig = new Mock<IOptions<StationConfig>>();
             _mockTimeProvider = new Mock<ITimeProvider>();
             _mockInfluxClient = new Mock<IInfluxClient>();
 
             //setup
-            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionFilterConfig { Enabled = false });
+            _mockConfig.Setup(x => x.Value).Returns(new PIRDetectionSinkConfig { Enabled = false });
 
             Subject<KafkaMessage> kmStream = new Subject<KafkaMessage>();
 
-            var filter = new PIRDetectionFilter(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object);
+            var filter = new PIRDetectionSink(_mockLogger.Object, _mockConfig.Object, _mockStationConfig.Object, _mockTimeProvider.Object, _mockInfluxClient.Object);
 
             filter.Observe(kmStream);
 

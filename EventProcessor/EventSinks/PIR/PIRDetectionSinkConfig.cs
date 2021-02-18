@@ -1,6 +1,6 @@
 ﻿namespace EventProcessor.MessageActionFilters.PIR
 {
-    public class PIRDetectionFilterConfig
+    public class PIRDetectionSinkConfig
     {
         public string VideoRequestTopic { get; set; }
 

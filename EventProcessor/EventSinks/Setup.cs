@@ -9,13 +9,13 @@ namespace EventProcessor.MessageActionFilters
     {
         public static void UseMessageActionFilters(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<PIRDetectionFilterConfig>(configuration.GetSection("PIRDetectionFilterConfig"));
+            services.Configure<PIRDetectionSinkConfig>(configuration.GetSection("PIRDetectionFilterConfig"));
             //setup configuration
             services.Configure<StationConfig>(configuration.GetSection("StationConfig"));
 
-            services.AddSingleton<IMessageActionFilter<KafkaMessage>, PIRDetectionFilter>();
+            services.AddSingleton<IEventSink<KafkaMessage>, PIRDetectionSink>();
 
-            services.AddSingleton<IMessageActionFilter<KafkaMessage>, AckFilter>();
+            services.AddSingleton<IEventSink<KafkaMessage>, AckFilter>();
         }
     }
 }

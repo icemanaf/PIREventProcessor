@@ -14,11 +14,11 @@ namespace EventProcessor
 
         private readonly AppConfig _appConfig;
 
-        private IEnumerable<IMessageActionFilter<KafkaMessage>> _filters;
+        private IEnumerable<IEventSink<KafkaMessage>> _filters;
 
         public IObservable<KafkaMessage> KafkaMessageStream { get; }
 
-        public App(IKafkaClient client, IOptions<AppConfig> appConfig, IEnumerable<IMessageActionFilter<KafkaMessage>> filters)
+        public App(IKafkaClient client, IOptions<AppConfig> appConfig, IEnumerable<IEventSink<KafkaMessage>> filters)
         {
             _filters = filters;
 

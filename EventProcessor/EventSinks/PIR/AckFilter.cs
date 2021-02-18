@@ -3,7 +3,7 @@ using System;
 
 namespace EventProcessor.MessageActionFilters.PIR
 {
-    public class AckFilter : IMessageActionFilter<KafkaMessage>
+    public class AckFilter : IEventSink<KafkaMessage>
     {
         public AckFilter()
         {

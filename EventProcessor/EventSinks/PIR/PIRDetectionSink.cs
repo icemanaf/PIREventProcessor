@@ -16,13 +16,13 @@ namespace EventProcessor.MessageActionFilters.PIR
     /// This filter detects when a PIR Detect message is broadcast by the RF gateway
     /// Example of a signal is AAAADDD4445ZZZZ , the digits in the middle are the sensor identifier which can be mapped to a location
     /// </summary>
-    public class PIRDetectionFilter : IMessageActionFilter<KafkaMessage>
+    public class PIRDetectionSink : IEventSink<KafkaMessage>
     {
         private Regex _pirDetectRegExp = new Regex("A{3,}D{3,}[0-9]{4,6}Z{3,}", RegexOptions.Compiled);
         private Regex _stationExtractorRegExp = new Regex("[0-9]{4,6}", RegexOptions.Compiled);
 
-        private readonly ILogger<PIRDetectionFilter> _logger;
-        private readonly PIRDetectionFilterConfig _config;
+        private readonly ILogger<PIRDetectionSink> _logger;
+        private readonly PIRDetectionSinkConfig _config;
         private readonly StationConfig _stationConfig;
         private readonly ITimeProvider _timeProvider;
         private readonly IInfluxClient _influxClient;
@@ -34,7 +34,7 @@ namespace EventProcessor.MessageActionFilters.PIR
         //if there are hits beyond the threshold value within the buffer, send an acknowledgement.
         private const int THRESHOLD_VALUE = 2;
 
-        public PIRDetectionFilter(ILogger<PIRDetectionFilter> logger, IOptions<PIRDetectionFilterConfig> config, IOptions<StationConfig> stationConfig, ITimeProvider timeProvider, IInfluxClient influxClient, IScheduler scheduler = null)
+        public PIRDetectionSink(ILogger<PIRDetectionSink> logger, IOptions<PIRDetectionSinkConfig> config, IOptions<StationConfig> stationConfig, ITimeProvider timeProvider, IInfluxClient influxClient, IScheduler scheduler = null)
         {
             _logger = logger;
 
@@ -79,8 +79,6 @@ namespace EventProcessor.MessageActionFilters.PIR
                     .GroupBy(x => x)
                     .Where(grp => grp.Count() >= THRESHOLD_VALUE).
                     Select(x => x.Key);
-
-                // var stations = kmList.GroupBy(x => ExtractStationFromKM(x, _stationConfig).Id).Where(grp => grp.Count() > THRESHOLD_VALUE).Select(x => x.Key);
 
                 foreach (var station in stations)
                 {
