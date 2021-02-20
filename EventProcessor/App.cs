@@ -14,13 +14,13 @@ namespace EventProcessor
 
         private readonly AppConfig _appConfig;
 
-        private IEnumerable<IEventSink<KafkaMessage>> _filters;
+        private IEnumerable<IEventSink<KafkaMessage>> _sinks;
 
         public IObservable<KafkaMessage> KafkaMessageStream { get; }
 
-        public App(IKafkaClient client, IOptions<AppConfig> appConfig, IEnumerable<IEventSink<KafkaMessage>> filters)
+        public App(IKafkaClient client, IOptions<AppConfig> appConfig, IEnumerable<IEventSink<KafkaMessage>> sinks)
         {
-            _filters = filters;
+            _sinks = sinks;
 
             _appConfig = appConfig.Value;
 
@@ -44,7 +44,7 @@ namespace EventProcessor
         public void Run()
         {
 
-            foreach(var filter in _filters)
+            foreach(var filter in _sinks)
             {
                 filter.Observe(KafkaMessageStream);
             }

@@ -32,7 +32,7 @@ namespace EventProcessor.MessageActionFilters.PIR
         private const int BUFFER_TIME = 10;
 
         //if there are hits beyond the threshold value within the buffer, send an acknowledgement.
-        private const int THRESHOLD_VALUE = 2;
+        private const int THRESHOLD_VALUE = 1;
 
         public PIRDetectionSink(ILogger<PIRDetectionSink> logger, IOptions<PIRDetectionSinkConfig> config, IOptions<StationConfig> stationConfig, ITimeProvider timeProvider, IInfluxClient influxClient, IScheduler scheduler = null)
         {
