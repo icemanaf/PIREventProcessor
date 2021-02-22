@@ -1,6 +1,6 @@
 ﻿using EventProcessor.Kafka;
-using EventProcessor.MessageActionFilters;
-using EventProcessor.MessageActionFilters.PIR;
+using EventProcessor.EventSinks;
+using EventProcessor.EventSinks.PIR;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;

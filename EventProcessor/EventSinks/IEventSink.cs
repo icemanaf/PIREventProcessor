@@ -4,7 +4,7 @@ using System.Text;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace EventProcessor.MessageActionFilters
+namespace EventProcessor.EventSinks
 {
     public interface IEventSink<T>
     {

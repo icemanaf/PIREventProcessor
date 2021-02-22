@@ -1,5 +1,5 @@
 ﻿using EventProcessor.Kafka;
-using EventProcessor.MessageActionFilters;
+using EventProcessor.EventSinks;
 using Microsoft.Extensions.Options;
 using Proto.Models;
 using System;

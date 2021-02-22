@@ -10,7 +10,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
-namespace EventProcessor.MessageActionFilters.PIR
+namespace EventProcessor.EventSinks.PIR
 {
     /// <summary>
     /// This filter detects when a PIR Detect message is broadcast by the RF gateway

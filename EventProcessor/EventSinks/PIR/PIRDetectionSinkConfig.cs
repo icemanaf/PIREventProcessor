@@ -1,4 +1,4 @@
-﻿namespace EventProcessor.MessageActionFilters.PIR
+﻿namespace EventProcessor.EventSinks.PIR
 {
     public class PIRDetectionSinkConfig
     {

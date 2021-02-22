@@ -1,6 +1,6 @@
 ﻿using EventProcessor.Influx;
 using EventProcessor.Kafka;
-using EventProcessor.MessageActionFilters;
+using EventProcessor.EventSinks;
 using EventProcessor.Processor;
 using EventProcessor.Utilities;
 using Microsoft.Extensions.Configuration;

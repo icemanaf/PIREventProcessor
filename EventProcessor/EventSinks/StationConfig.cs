@@ -1,4 +1,4 @@
-﻿namespace EventProcessor.MessageActionFilters
+﻿namespace EventProcessor.EventSinks
 {
     public class StationConfig
     {

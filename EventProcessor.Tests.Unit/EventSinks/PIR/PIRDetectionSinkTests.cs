@@ -1,6 +1,6 @@
 ﻿using EventProcessor.Influx;
-using EventProcessor.MessageActionFilters;
-using EventProcessor.MessageActionFilters.PIR;
+using EventProcessor.EventSinks;
+using EventProcessor.EventSinks.PIR;
 using EventProcessor.Processor;
 using EventProcessor.Tests.Unit.Utilities;
 using EventProcessor.Utilities;
@@ -15,10 +15,10 @@ using System;
 using System.Reactive;
 using System.Reactive.Subjects;
 
-namespace EventProcessor.Tests.Unit.MessageActionFilters.PIR
+namespace EventProcessor.Tests.Unit.EventSinks.PIR
 {
     [TestFixture]
-    public class DetectionFilterTests
+    public class PIRDetectionSinkTests
     {
         private Mock<IMessageStreamer<KafkaMessage>> _mockMessageStreamer;
         private Mock<ILogger<PIRDetectionSink>> _mockLogger;

@@ -1,9 +1,9 @@
-﻿using EventProcessor.MessageActionFilters.PIR;
+﻿using EventProcessor.EventSinks.PIR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Proto.Models;
 
-namespace EventProcessor.MessageActionFilters
+namespace EventProcessor.EventSinks
 {
     public static class SetUp
     {
@@ -15,7 +15,7 @@ namespace EventProcessor.MessageActionFilters
 
             services.AddSingleton<IEventSink<KafkaMessage>, PIRDetectionSink>();
 
-            services.AddSingleton<IEventSink<KafkaMessage>, AckFilter>();
+            services.AddSingleton<IEventSink<KafkaMessage>, AckSink>();
         }
     }
 }

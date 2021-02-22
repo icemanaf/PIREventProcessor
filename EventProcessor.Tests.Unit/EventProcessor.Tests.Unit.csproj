@@ -1,10 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ProcessorTests\**" />
+    <EmbeddedResource Remove="ProcessorTests\**" />
+    <None Remove="ProcessorTests\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Reactive.Testing" Version="4.4.1" />
@@ -21,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventProcessor\EventProcessor.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ProcessorTests\" />
   </ItemGroup>
 
 </Project>
