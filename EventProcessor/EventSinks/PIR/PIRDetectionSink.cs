@@ -114,7 +114,7 @@ namespace EventProcessor.EventSinks.PIR
         {
             if (_config.Enabled)
             {
-                _logger.LogInformation("PIR Detection filter  Enabled.");
+                _logger.LogInformation("PIR Detection sink  Enabled.");
 
                 var sch = _scheduler == null ? DefaultScheduler.Instance : _scheduler;
 

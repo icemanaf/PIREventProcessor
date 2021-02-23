@@ -9,9 +9,11 @@ namespace EventProcessor.EventSinks
     {
         public static void UseMessageActionFilters(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<PIRDetectionSinkConfig>(configuration.GetSection("PIRDetectionFilterConfig"));
+            services.Configure<PIRDetectionSinkConfig>(configuration.GetSection("PIRDetectionSinkConfig"));
             //setup configuration
             services.Configure<StationConfig>(configuration.GetSection("StationConfig"));
+
+            services.Configure<AckSinkConfig>(configuration.GetSection("AckSinkConfig"))
 
             services.AddSingleton<IEventSink<KafkaMessage>, PIRDetectionSink>();
 
