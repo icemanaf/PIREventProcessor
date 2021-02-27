@@ -96,7 +96,7 @@ namespace EventProcessor.Tests.Unit.EventSinks.PIR
 
             _mockConfig.Setup(x => x.Value).Returns(new AckSinkConfig() { Enabled = true });
 
-            _ackSink = new(_mockLogger.Object, _mockStationConfig.Object, _mockInfluxClient.Object, _mockConfig.Object, _mockTimeProvider.Object,testScheduler);
+            _ackSink = new(_mockLogger.Object, _mockStationConfig.Object, _mockInfluxClient.Object, _mockConfig.Object, _mockTimeProvider.Object, testScheduler);
 
             _ackSink.Observe(kmStream);
 

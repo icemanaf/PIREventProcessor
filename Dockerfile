@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.0.0-buster-slim-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:5.0.3-buster-slim-arm32v7 AS base
 COPY /tmp/qemu-arm-static /usr/bin/qemu-arm-static
 RUN apt-get update && apt-get install -y librdkafka-dev librdkafka1
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
 WORKDIR /src
 COPY PIREventProcessor.sln ./
 COPY EventProcessor/EventProcessor.csproj EventProcessor/
