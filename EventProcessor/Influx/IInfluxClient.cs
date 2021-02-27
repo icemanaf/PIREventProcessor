@@ -6,6 +6,6 @@ namespace EventProcessor.Influx
     {
         void WritePirDetectEvent(string correlationId, string deviceId, string area, DateTime time);
 
-        void WritePirVoltage(string correlationId, string deviceId, decimal voltage, DateTime time);
+        void WritePirVoltage(string correlationId, string deviceId, float voltage, DateTime time);
     }
 }

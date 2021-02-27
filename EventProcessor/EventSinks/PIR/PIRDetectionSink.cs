@@ -116,7 +116,7 @@ namespace EventProcessor.EventSinks.PIR
             {
                 _logger.LogInformation("PIR Detection sink  Enabled.");
 
-                var sch = _scheduler == null ? DefaultScheduler.Instance : _scheduler;
+                var sch = _scheduler ?? DefaultScheduler.Instance;
 
                 observable.Where(x =>
                 {

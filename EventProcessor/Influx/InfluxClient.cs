@@ -38,7 +38,7 @@ namespace EventProcessor.Influx
             }
         }
 
-        public void WritePirVoltage(string correlationId, string deviceId, decimal voltage, DateTime time)
+        public void WritePirVoltage(string correlationId, string deviceId, float voltage, DateTime time)
         {
             using (Metrics.Collector = new CollectorConfiguration().Batch.AtInterval(TimeSpan.FromSeconds(1)).WriteTo
                 .InfluxDB(_config.InfluxServer, _config.Database).CreateCollector())

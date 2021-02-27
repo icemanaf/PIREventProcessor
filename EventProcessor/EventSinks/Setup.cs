@@ -13,7 +13,7 @@ namespace EventProcessor.EventSinks
             //setup configuration
             services.Configure<StationConfig>(configuration.GetSection("StationConfig"));
 
-            services.Configure<AckSinkConfig>(configuration.GetSection("AckSinkConfig"))
+            services.Configure<AckSinkConfig>(configuration.GetSection("AckSinkConfig"));
 
             services.AddSingleton<IEventSink<KafkaMessage>, PIRDetectionSink>();
 

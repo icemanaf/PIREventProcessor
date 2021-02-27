@@ -45,7 +45,7 @@ namespace KafkaConsumer.Tests
 
             var influxClient = new InfluxClient(_mockConfig.Object, _mockLogger.Object);
 
-            influxClient.WritePirVoltage("test1", "5677",4.543m, DateTime.Now);
+            influxClient.WritePirVoltage("test1", "5677",4.543f, DateTime.Now);
         }
     }
 }
