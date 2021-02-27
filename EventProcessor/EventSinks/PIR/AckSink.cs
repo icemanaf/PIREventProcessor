@@ -89,8 +89,6 @@ namespace EventProcessor.EventSinks.PIR
             float voltage = 0.0f;
             try
             {
-               
-
                 var stationFragment = _ackDetecRegExp.Match(km.Payload).Groups[0].Value;
 
                 var match = _stationExtractorRegExp.Match(stationFragment);

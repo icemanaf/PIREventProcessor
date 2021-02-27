@@ -47,6 +47,7 @@ namespace EventProcessor.Influx
                 {
                     {"correlation_id", correlationId},
                     {"device_id", deviceId},
+                    {"voltage",voltage },
                     {"detect_time", $"{time:dd-MMM-yyyy HH:mm:ss}"}
                 };
 
